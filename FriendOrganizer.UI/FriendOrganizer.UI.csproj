@@ -37,7 +37,14 @@
     <Reference Include="Autofac, Version=4.6.2.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.4.6.2\lib\net45\Autofac.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression.FileSystem" />
@@ -109,11 +116,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FriendOrganizer.DataAccess\FriendOrganizer.DataAccess.csproj">
-      <Project>{3dfb5516-44a4-4d8a-910f-e52de2f19dd1}</Project>
+      <Project>{80e69b99-1706-4a72-810e-5bc83a28df5b}</Project>
       <Name>FriendOrganizer.DataAccess</Name>
     </ProjectReference>
     <ProjectReference Include="..\FriendOrganizer.Model\FriendOrganizer.Model.csproj">
-      <Project>{de713348-c15d-44b5-bd5f-29cb07816440}</Project>
+      <Project>{2be804ff-586b-4b3c-a52c-9babb4d9d54f}</Project>
       <Name>FriendOrganizer.Model</Name>
     </ProjectReference>
   </ItemGroup>

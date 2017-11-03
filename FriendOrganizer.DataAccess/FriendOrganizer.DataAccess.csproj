@@ -52,6 +52,10 @@
     <Compile Include="Migrations\201710270653227_InitialDataBase.Designer.cs">
       <DependentUpon>201710270653227_InitialDataBase.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201711031327050_wawa.cs" />
+    <Compile Include="Migrations\201711031327050_wawa.Designer.cs">
+      <DependentUpon>201711031327050_wawa.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -62,6 +66,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201710270653227_InitialDataBase.resx">
       <DependentUpon>201710270653227_InitialDataBase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711031327050_wawa.resx">
+      <DependentUpon>201711031327050_wawa.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

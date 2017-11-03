@@ -13,7 +13,7 @@ namespace FriendOrganizer.UI.Wrapper
            
         }
 
-        public Friend Model { get; }
+      
 
         public int Id { get { return Model.Id; } }
 

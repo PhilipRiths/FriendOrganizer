@@ -56,6 +56,10 @@
     <Compile Include="Migrations\201711031327050_wawa.Designer.cs">
       <DependentUpon>201711031327050_wawa.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201711041206329_AddedFriendPhoneNumbers.cs" />
+    <Compile Include="Migrations\201711041206329_AddedFriendPhoneNumbers.Designer.cs">
+      <DependentUpon>201711041206329_AddedFriendPhoneNumbers.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -69,6 +73,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201711031327050_wawa.resx">
       <DependentUpon>201711031327050_wawa.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711041206329_AddedFriendPhoneNumbers.resx">
+      <DependentUpon>201711041206329_AddedFriendPhoneNumbers.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

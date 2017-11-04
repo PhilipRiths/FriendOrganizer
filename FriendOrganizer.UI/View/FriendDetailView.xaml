@@ -46,6 +46,26 @@
             <Button Content="Delete" Width="125" Margin="10" 
                     Command="{Binding DeleteCommand}"/>
         </StackPanel>
+        <DockPanel Grid.Row="8" Margin="10">
+            <StackPanel DockPanel.Dock="Right">
+                <Button Content="Add" Width="125" Margin="10"
+                        Command="{Binding AddPhoneNumberCommand}"/>
+                <Button Content="Remove" Width="125" Margin="10"
+                        Command="{Binding RemovePhoneNumberCommand}"/>
+            </StackPanel>
+            <DataGrid ItemsSource="{Binding PhoneNumbers}"
+                      SelectedItem="{Binding SelectedPhoneNumber, Mode=TwoWay}"
+                      AutoGenerateColumns="False" RowHeaderWidth="0">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Phone numbers" Width="*"
+                                        ElementStyle="{StaticResource DataGridColumnStyle}"
+                                        EditingElementStyle="{StaticResource DataGridEditingColumnStyle}"
+                                        Binding="{Binding Number, Mode=TwoWay, 
+                        UpdateSourceTrigger=PropertyChanged}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            
+        </DockPanel>
     </Grid>
 
 </UserControl>

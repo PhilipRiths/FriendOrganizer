@@ -18,10 +18,9 @@ using Prism.Events;
 
 namespace FriendOrganizer.UI.ViewModel
 {
-    public class FriendDetailViewModel : ViewModelBase, IFriendDetailViewModel
+    public class FriendDetailViewModel : DetailViewModelBase, IFriendDetailViewModel
     {
         private IFriendRepository _friendRepository;
-        private IEventAggregator _eventAggregator;
         private FriendWrapper _friend { get; set; }
         private bool _hasChanges;
         private IMessageDialogService _messageDialogService;
@@ -31,16 +30,14 @@ namespace FriendOrganizer.UI.ViewModel
             IEventAggregator eventAggregator,
             IMessageDialogService messageDialogService,
             IProgrammingLanguageLookupDataService programmingLanguageLookupDataService)
+            : base(eventAggregator)
         {
             _friendRepository = friendRepository;
-            _eventAggregator = eventAggregator;
             _messageDialogService = messageDialogService;
             _programmingLanguageLookupDataService = programmingLanguageLookupDataService;
 
             AddPhoneNumberCommand = new DelegateCommand(OnAddPhoneNumberExecute);
             RemovePhoneNumberCommand = new DelegateCommand(OnRemovePhoneNumberExecute, OnRemovePhoneNumberCanExecute);
-            SaveCommand = new DelegateCommand(OnSaveExecute, OnsaveCanExecute);
-            DeleteCommand = new DelegateCommand(OnDeleteExecute);
 
             ProgrammingLanguages = new ObservableCollection<LookupItem>();
             PhoneNumbers = new ObservableCollection<FriendPhoneNumberWrapper>();
@@ -70,14 +67,14 @@ namespace FriendOrganizer.UI.ViewModel
             SelectedPhoneNumber = null;
             HasChanges = _friendRepository.HasChanges();
             ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
-            
+
         }
 
         public ObservableCollection<LookupItem> ProgrammingLanguages { get; }
 
 
 
-        private async void OnDeleteExecute()
+        protected override  async void OnDeleteExecute()
         {
             var result = _messageDialogService.ShowOkCancelDialog(
                 $"Do you really want to the friend {Friend.FirstName} {Friend.LastName}?",
@@ -86,12 +83,12 @@ namespace FriendOrganizer.UI.ViewModel
             {
                 _friendRepository.Remove(Friend.Model);
                 await _friendRepository.SaveAsync();
-                _eventAggregator.GetEvent<AfterFriendDeletedEvent>().Publish(Friend.Id);
+                RaiseDetailDeletedEvent(Friend.Id);
             }
 
         }
 
-        public async Task LoadAsync(int? friendId)
+        public override async Task LoadAsync(int? friendId)
         {
             var friend = friendId.HasValue
                 ? await _friendRepository.GetByIdAsync(friendId.Value)
@@ -192,47 +189,24 @@ namespace FriendOrganizer.UI.ViewModel
             }
         }
 
-
-        public bool HasChanges
-        {
-            get { return _hasChanges; }
-            set
-            {
-                if (_hasChanges != value)
-                {
-                    _hasChanges = value;
-                    OnPropertyChanged();
-                    ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
-                }
-            }
-        }
-
-        public ICommand SaveCommand { get; }
-
-        public ICommand DeleteCommand { get; }
-
         public ICommand AddPhoneNumberCommand { get; }
 
         public ICommand RemovePhoneNumberCommand { get; }
 
-        private bool OnsaveCanExecute()
+        protected override bool OnSaveCanExecute()
         {
-
             return Friend != null
                 && !Friend.HasErrors
                 && PhoneNumbers.All(pn => pn.HasErrors)
                 && HasChanges;
         }
 
-        private async void OnSaveExecute()
+        protected override async void OnSaveExecute()
         {
             await _friendRepository.SaveAsync();
             HasChanges = _friendRepository.HasChanges();
-            _eventAggregator.GetEvent<AfterFriendSavedEvent>().Publish(new AfterFriendsSavedEventArgs
-            {
-                Id = Friend.Id,
-                DisplayMember = $"{Friend.FirstName} {Friend.LastName}"
-            });
+            RaiseDetailSavedEvent(Friend.Id, $"{Friend.FirstName} {Friend.LastName}");
+
         }
 
         private Friend CreateNewFriend()

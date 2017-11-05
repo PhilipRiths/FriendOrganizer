@@ -20,7 +20,7 @@ namespace FriendOrganizer.UI.ViewModel
     {
         private IEventAggregator _eventAggregator;
         private Func<IFriendDetailViewModel> _friendDetailViewModelCreator;
-        private IFriendDetailViewModel _detailViewModel;
+        private IDetailViewModel _detailViewModel;
         private IMessageDialogService _messageDialogService;
 
         public MainViewModel(INavigationViewModel navigationViewModel,
@@ -29,33 +29,33 @@ namespace FriendOrganizer.UI.ViewModel
             IMessageDialogService messageDialogService)
         {
             _eventAggregator = eventAggregator;
-          
+
             _friendDetailViewModelCreator = friendDetailViewModelCreator;
             _messageDialogService = messageDialogService;
 
-            _eventAggregator.GetEvent<OpenFriendDetailViewEvent>()
-                .Subscribe(OnOpenFriendDetailView);
+            _eventAggregator.GetEvent<OpenDetailViewEvent>()
+                .Subscribe(OnOpenDetailView);
 
-            _eventAggregator.GetEvent<AfterFriendDeletedEvent>()
-                .Subscribe(AfterFriendDeleted);
+            _eventAggregator.GetEvent<AfterDetailDeletedEvent>()
+                .Subscribe(AfterDetailDeleted);
 
-            CreateNewFriendCommand =  new DelegateCommand(OnCreateNewFriendExecute);
+            CreateNewDetailCommand = new DelegateCommand<Type>(OnCreateNewDetailExecute);
 
             NavigationViewModel = navigationViewModel;
         }
 
-  
+
 
         public INavigationViewModel NavigationViewModel { get; }
 
-        public ICommand CreateNewFriendCommand { get; }
+        public ICommand CreateNewDetailCommand { get; }
 
-        public IFriendDetailViewModel DetailViewModel
+        public IDetailViewModel DetailViewModel
         {
             get { return _detailViewModel; }
-           private set
+            private set
             {
-                _detailViewModel = value; 
+                _detailViewModel = value;
                 OnPropertyChanged();
             }
         }
@@ -67,30 +67,39 @@ namespace FriendOrganizer.UI.ViewModel
         }
 
 
-        private async void OnOpenFriendDetailView(int? friendId)
+        private async void OnOpenDetailView(OpenDetailViewEventArgs args)
         {
             if (DetailViewModel != null && DetailViewModel.HasChanges)
             {
                 var result =
                     _messageDialogService.ShowOkCancelDialog("You've made changes. Navigate away?", "Question");
-               
+
                 if (result == MessageDialogResult.Cancel)
                 {
                     return;
                 }
             }
-           DetailViewModel = _friendDetailViewModelCreator();
-            await DetailViewModel.LoadAsync(friendId);
-        }
-        private void OnCreateNewFriendExecute()
-        {
-           OnOpenFriendDetailView(null);
-        }
+            switch (args.ViewModelName)
+            {
+                case nameof(FriendDetailViewModel):
+                    DetailViewModel = _friendDetailViewModelCreator();
+                    break;
+            }
 
-        private void AfterFriendDeleted(int friendId)
-        {
-            DetailViewModel = null;
-        }
+            await DetailViewModel.LoadAsync(args.Id);
+            }
+            private void OnCreateNewDetailExecute(Type viewModelType)
+            {
+                OnOpenDetailView(new OpenDetailViewEventArgs
+                {
+                    ViewModelName = viewModelType.Name
+                });
+            }
 
+            private void AfterDetailDeleted(AfterDetailDeletedEventArgs args)
+            {
+                DetailViewModel = null;
+            }
+
+        }
     }
-}

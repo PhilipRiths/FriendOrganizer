@@ -35,11 +35,11 @@
                           CommandParameter="{x:Type viewModel:FriendDetailViewModel}"/>
                 <MenuItem Header="New Meeting" Command="{Binding CreateNewDetailCommand}"
                           CommandParameter="{x:Type viewModel:MeetingDetailViewModel}"/>
-                <MenuItem Header="Edit">
-                    <MenuItem Header="Programming Languages"
-                              Command="{Binding OpenSingleDetailViewCommand}"
-                              CommandParameter="{x:Type viewModel:ProgrammingLanguageDetailViewModel}"></MenuItem>
-                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="Edit">
+                <MenuItem Header="Programming Languages"
+                          Command="{Binding OpenSingleDetailViewCommand}"
+                          CommandParameter="{x:Type viewModel:ProgrammingLanguageDetailViewModel}"></MenuItem>
             </MenuItem>
         </Menu>
         <view:NavigationView Grid.Row="1"

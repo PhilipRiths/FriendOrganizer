@@ -19,7 +19,7 @@ namespace FriendOrganizer.UI.Data.Repositories
         {
 
         }
-        public async Task<Friend> GetByIdAsync(int friendId)
+        public override async Task<Friend> GetByIdAsync(int friendId)
         {
 
             return await Context.Friends

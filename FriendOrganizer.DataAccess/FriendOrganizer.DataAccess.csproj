@@ -64,6 +64,14 @@
     <Compile Include="Migrations\201711051154523_EditMeeting.Designer.cs">
       <DependentUpon>201711051154523_EditMeeting.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201711061949082_baba.cs" />
+    <Compile Include="Migrations\201711061949082_baba.Designer.cs">
+      <DependentUpon>201711061949082_baba.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711071530303_babababba.cs" />
+    <Compile Include="Migrations\201711071530303_babababba.Designer.cs">
+      <DependentUpon>201711071530303_babababba.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -83,6 +91,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201711051154523_EditMeeting.resx">
       <DependentUpon>201711051154523_EditMeeting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711061949082_baba.resx">
+      <DependentUpon>201711061949082_baba.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711071530303_babababba.resx">
+      <DependentUpon>201711071530303_babababba.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

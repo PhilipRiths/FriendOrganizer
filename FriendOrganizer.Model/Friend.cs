@@ -24,8 +24,11 @@ namespace FriendOrganizer.Model
         [StringLength(50)]
         [EmailAddress]
         public string Email { get; set; }
+    
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
 
-        public int? FavouriteLanguageId { get; set; }
+        public int? FavoriteLanguageId { get; set; }
         public ProgrammingLanguage FavouriteLanguage { get; set; }
 
         public ICollection<FriendPhoneNumber> PhoneNumbers { get; set; }

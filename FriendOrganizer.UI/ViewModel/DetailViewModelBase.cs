@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity.Core.Common.CommandTrees;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,11 +31,11 @@ namespace FriendOrganizer.UI.ViewModel
             CloseDetailViewCommand = new DelegateCommand(OnCloseDetailViewExecute);
         }
 
-        protected virtual void OnCloseDetailViewExecute()
+        protected  virtual async void OnCloseDetailViewExecute()
         {
             if (HasChanges)
             {
-                var result = MessageDialogService.ShowOkCancelDialog(
+                var result = await MessageDialogService.ShowOkCancelDialogAsync(
                     "You've made changes. Close this item?", "Question");
                 if (result == MessageDialogResult.Cancel)
                 {
@@ -65,7 +66,7 @@ namespace FriendOrganizer.UI.ViewModel
 
         public ICommand SaveCommand { get; set; }
 
-        public abstract Task LoadAsync(int meetingId);
+        public abstract Task LoadAsync(int id);
 
         public int Id
         {
@@ -128,7 +129,45 @@ namespace FriendOrganizer.UI.ViewModel
                 ViewModelName = this.GetType().Name
             });
         }
+       protected  async Task SaveWithOptimisticConcurrencyAsync(Func<Task> saveFunc,
+           Action afterSaveAction)
+       {
+           try
+           {
+               await saveFunc();
+           }
+           catch (DbUpdateConcurrencyException ex)
+           {
+               var databaseValues = ex.Entries.Single().GetDatabaseValues();
+               if (databaseValues == null)
+               {
+                 await  MessageDialogService.ShowInfoDialogAsync("The entity has been deleted by another user");
+                   RaiseDetailDeletedEvent(Id);
+                   return;
 
+               }
+
+               var result = await MessageDialogService.ShowOkCancelDialogAsync("The entity has been changed in "
+                                                                    + "the meantime by someone else. Click Ok to save you're changes anyways, click Cancel"
+                                                                    + "to reload the entity from the database",
+                   "Question");
+
+               if (result == MessageDialogResult.OK)
+               {
+                   var entry = ex.Entries.Single();
+                   entry.OriginalValues.SetValues(entry.GetDatabaseValues());
+                   await saveFunc();
+               }
+               else
+               {
+                   await ex.Entries.Single().ReloadAsync();
+                   await LoadAsync(Id);
+               }
+           }
+
+           afterSaveAction();
+
+       }
 
     }
 }

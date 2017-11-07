@@ -12,11 +12,12 @@ namespace FriendOrganizer.UI.Wrapper
         public ProgrammingLanguageWrapper(ProgrammingLanguage model) : base(model)
         {
         }
-        public int Id {
+        public int Id
+        {
             get { return Model.Id; }
         }
 
-       
+
 
         public string Name
         {

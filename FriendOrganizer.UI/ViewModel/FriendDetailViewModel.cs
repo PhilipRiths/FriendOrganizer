@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -82,15 +83,15 @@ namespace FriendOrganizer.UI.ViewModel
 
 
 
-        protected override  async void OnDeleteExecute()
+        protected override async void OnDeleteExecute()
         {
             if (await _friendRepository.HasMeetingsAsync(Friend.Id))
             {
-                MessageDialogService.ShowInfoDialog($"{Friend.FirstName} {Friend.LastName} cant be deleted, as this is a part of atleast one meeting");
+               await MessageDialogService.ShowInfoDialogAsync($"{Friend.FirstName} {Friend.LastName} cant be deleted, as this is a part of atleast one meeting");
                 return;
             }
 
-            var result = MessageDialogService.ShowOkCancelDialog(
+            var result = await MessageDialogService.ShowOkCancelDialogAsync(
                 $"Do you really want to the friend {Friend.FirstName} {Friend.LastName}?",
                 "Question");
             if (result == MessageDialogResult.OK)
@@ -108,7 +109,7 @@ namespace FriendOrganizer.UI.ViewModel
                 ? await _friendRepository.GetByIdAsync(friendId)
                 : CreateNewFriend();
 
-            Id = Friend.Id;
+            Id = friend.Id;
 
             InitializeFriend(friend);
 
@@ -230,10 +231,14 @@ namespace FriendOrganizer.UI.ViewModel
 
         protected override async void OnSaveExecute()
         {
-            await _friendRepository.SaveAsync();
-            HasChanges = _friendRepository.HasChanges();
-            Id = Friend.Id;
-            RaiseDetailSavedEvent(Friend.Id, $"{Friend.FirstName} {Friend.LastName}");
+            await SaveWithOptimisticConcurrencyAsync(_friendRepository.SaveAsync,
+                () =>
+                {
+                    HasChanges = _friendRepository.HasChanges();
+                    Id = Friend.Id;
+                    RaiseDetailSavedEvent(Friend.Id, $"{Friend.FirstName} {Friend.LastName}");
+                });
+
 
         }
 

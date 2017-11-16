@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FriendOrganizer.Model;
+using FriendOrganizer.UI.Data.RestClient;
 
 namespace FriendOrganizer.UI.Wrapper
 {
     public class MeetingWrapper : ModelWrapper<Meeting>
     {
+       
         public MeetingWrapper(Meeting model) : base(model)
         {
 
@@ -31,6 +33,7 @@ namespace FriendOrganizer.UI.Wrapper
                 {
                     DateTo = DateFrom;
                 }
+
             }
         }
 
@@ -44,6 +47,17 @@ namespace FriendOrganizer.UI.Wrapper
                 {
                     DateFrom = DateTo;
                 }
+            }
+        }
+  
+        public string Location
+        {
+            get { return GetValue<string>(); }
+            set
+            {
+                SetValue(value);
+               
+
             }
         }
     }

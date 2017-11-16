@@ -72,6 +72,10 @@
     <Compile Include="Migrations\201711071530303_babababba.Designer.cs">
       <DependentUpon>201711071530303_babababba.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201711151040292_LocationAdded.cs" />
+    <Compile Include="Migrations\201711151040292_LocationAdded.Designer.cs">
+      <DependentUpon>201711151040292_LocationAdded.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -97,6 +101,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201711071530303_babababba.resx">
       <DependentUpon>201711071530303_babababba.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711151040292_LocationAdded.resx">
+      <DependentUpon>201711151040292_LocationAdded.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

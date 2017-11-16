@@ -51,7 +51,7 @@ namespace FriendOrganizer.UI.ViewModel
             NavigationViewModel = navigationViewModel;
         }
 
-      
+
         private void AfterDetailClosed(AfterDetailClosedEventArgs args)
         {
             RemoveDetailViewModel(args.Id, args.ViewModelName);
@@ -62,7 +62,7 @@ namespace FriendOrganizer.UI.ViewModel
 
         public ICommand CreateNewDetailCommand { get; }
 
-        public ICommand OpenSingleDetailViewCommand { get;}
+        public ICommand OpenSingleDetailViewCommand { get; }
 
         public ObservableCollection<IDetailViewModel> DetailViewModels { get; }
 
@@ -101,13 +101,13 @@ namespace FriendOrganizer.UI.ViewModel
                 }
                 catch
                 {
-                   await _messageDialogService.ShowInfoDialogAsync("Could not load the entity, " +
-                        "maybe it was deleted in the meantime by another user. " +
-                        "The navigation is refreshed for you");
+                    await _messageDialogService.ShowInfoDialogAsync("Could not load the entity, " +
+                         "maybe it was deleted in the meantime by another user. " +
+                         "The navigation is refreshed for you");
                     await NavigationViewModel.LoadAsync();
                     return;
                 }
-               
+
                 DetailViewModels.Add(detailViewModel);
             }
 

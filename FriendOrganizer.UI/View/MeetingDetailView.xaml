@@ -16,6 +16,9 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition />
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
@@ -31,7 +34,11 @@
         <toolkit:DateTimePicker Grid.Row="5" Value="{Binding Meeting.DateTo, Mode=TwoWay,
             UpdateSourceTrigger=PropertyChanged}"></toolkit:DateTimePicker>
 
-        <Grid Grid.Row="6" Margin="10">
+        <Label Grid.Row="6" Content="Location" Margin="10 0"/>
+        <TextBox Grid.Row="7" Text="{Binding Meeting.Location, Mode=TwoWay,
+            UpdateSourceTrigger=PropertyChanged}"></TextBox>
+
+        <Grid Grid.Row="8" Margin="10">
             <Grid.Resources>
                 <DataTemplate DataType="{x:Type model:Friend}">
                     <TextBlock><Run Text="{Binding FirstName}"/><Run Text="{Binding LastName}"/></TextBlock>
@@ -61,10 +68,14 @@
             <ListView Grid.Row="1" ItemsSource="{Binding AvailableFriends}"
                       SelectedItem="{Binding SelectedAvailableFriend}" Grid.Column="2"/>
         </Grid>
+       
 
-        <StackPanel Grid.Row="7" Orientation="Horizontal">
+    <ListView Grid.Row="9"  ItemsSource="{Binding CurrentWeather}"/>
+        
+        <StackPanel Grid.Row="10" Orientation="Horizontal">
             <Button Content="Save" Width="75" Margin="10" Command="{Binding SaveCommand}"></Button>
             <Button Content="Delete" Width="75" Margin="10" Command="{Binding DeleteCommand}"></Button>
+            <Button Content="Check weather" Width="150" Margin="10" Command="{Binding CheckWeatherCommand}"></Button>
         </StackPanel>
     </Grid>
 </UserControl>

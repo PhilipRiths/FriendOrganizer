@@ -20,6 +20,8 @@ namespace FriendOrganizer.Model
         [StringLength(50)]
         public string Title { get; set; }
 
+        public string Location { get; set; }
+
         public DateTime DateFrom { get; set; }
 
         public DateTime DateTo { get; set; }

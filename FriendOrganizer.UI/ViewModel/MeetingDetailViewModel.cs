@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using FriendOrganizer.Model;
 using FriendOrganizer.UI.Data.Repositories;
+using FriendOrganizer.UI.Data.RestClient;
 using FriendOrganizer.UI.Event;
 using FriendOrganizer.UI.View.Services;
 using FriendOrganizer.UI.Wrapper;
@@ -20,7 +21,7 @@ namespace FriendOrganizer.UI.ViewModel
         private IMeetingRepository _meetingRepository;
         private Friend _selectedAvailableFriend;
         private Friend _selectedAddedFriend;
-
+        private static RestClient _restClient = new RestClient();
         public MeetingDetailViewModel(IEventAggregator eventAggregator,
             IMessageDialogService messageDialogService,
             IMeetingRepository meetingRepository) : base(eventAggregator, messageDialogService)
@@ -29,11 +30,31 @@ namespace FriendOrganizer.UI.ViewModel
             eventAggregator.GetEvent<AfterDetailSavedEvent>().Subscribe(AfterDetailSaved);
             eventAggregator.GetEvent<AfterDetailDeletedEvent>().Subscribe(AfterDetailDeleted);
 
+
+            CurrentWeather = new ObservableCollection<string>();
             AddedFriends = new ObservableCollection<Friend>();
             AvailableFriends = new ObservableCollection<Friend>();
             AddFriendCommand = new DelegateCommand(OnAddFriendExecute, OnAddFriendCanExecute);
             RemoveFriendCommand = new DelegateCommand(OnRemoveFriendExecute, OnRemoveFriendCanExecute);
+            CheckWeatherCommand = new DelegateCommand(CheckWeatherExecute);
         }
+
+        private async void CheckWeatherExecute()
+        {
+           
+                CurrentWeather.Clear();
+            
+            var weather = await _restClient.RunAsync(Meeting.Location, Meeting.DateFrom);
+            if (weather != null)
+            {
+             CurrentWeather.Add(weather);
+               
+            }
+        
+        }
+
+
+        public ICommand CheckWeatherCommand { get; set; }
 
         private async void AfterDetailDeleted(AfterDetailDeletedEventArgs args)
         {
@@ -41,7 +62,7 @@ namespace FriendOrganizer.UI.ViewModel
             {
                 _allFriends = await _meetingRepository.GetAllFriendsAsync();
                 SetupPicklist();
-                
+
             }
         }
 
@@ -96,6 +117,8 @@ namespace FriendOrganizer.UI.ViewModel
 
         public ObservableCollection<Friend> AddedFriends { get; set; }
 
+        public ObservableCollection<string> CurrentWeather { get; set; }
+
         public Friend SelectedAvailableFriend
         {
             get { return _selectedAvailableFriend; }
@@ -139,7 +162,7 @@ namespace FriendOrganizer.UI.ViewModel
             if (result == MessageDialogResult.OK)
             {
                 _meetingRepository.Remove(Meeting.Model);
-               await _meetingRepository.SaveAsync();
+                await _meetingRepository.SaveAsync();
                 RaiseDetailDeletedEvent(Meeting.Id);
             }
         }
@@ -150,6 +173,7 @@ namespace FriendOrganizer.UI.ViewModel
             HasChanges = _meetingRepository.HasChanges();
             Id = Meeting.Id;
             RaiseDetailSavedEvent(Meeting.Id, Meeting.Title);
+
         }
 
         protected override bool OnSaveCanExecute()
